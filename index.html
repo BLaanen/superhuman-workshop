@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Superhuman: From Chatbots to Conductors</title>
+  <meta name="description" content="Build your personal website & learn the spec-driven methodology for any project. Sunday, Feb 15th. 12 seats only.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== DESIGN TOKENS ===== */
+    :root {
+      --bg-primary: #050505;
+      --bg-secondary: #0a0a0a;
+      --bg-tertiary: #111111;
+      --bg-card: #080808;
+      --text-primary: #f5f5f5;
+      --text-secondary: #999999;
+      --text-muted: #555555;
+      --accent-green: #00ff88;
+      --accent-green-dim: rgba(0, 255, 136, 0.08);
+      --accent-gold: #ffd60a;
+      --border-color: #1a1a1a;
+      --border-subtle: #141414;
+      --color-error: #ff5f57;
+      --color-success: #28c840;
+      --color-warning: #febc2e;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-display: 'Syne', sans-serif;
+      --shadow-terminal: 0 0 0 1px rgba(255,255,255,0.03), 0 50px 100px -20px rgba(0,0,0,0.7), 0 0 60px rgba(0, 255, 136, 0.03);
+      --shadow-gold-glow: 0 0 40px rgba(255, 214, 10, 0.3);
+      --shadow-cta-hover: 0 10px 40px rgba(255, 214, 10, 0.3);
+      --shadow-green-hover: 0 8px 24px rgba(0, 255, 136, 0.1);
+      --gradient-terminal-header: linear-gradient(180deg, #1a1a1a 0%, #111111 100%);
+      --gradient-hello-bar: linear-gradient(90deg, rgba(255, 214, 10, 0.15) 0%, rgba(0, 255, 136, 0.15) 100%);
+      --container-max-width: 880px;
+      --container-padding: 24px;
+      --radius-sm: 5px;
+      --radius-md: 8px;
+      --radius-lg: 10px;
+      --radius-xl: 12px;
+      --radius-2xl: 16px;
+      --radius-3xl: 24px;
+      --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+      --ease-bounce: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ===== BASE ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-display);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px);
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    .container {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      padding: 0 var(--container-padding);
+      position: relative;
+      z-index: 1;
+    }
+
+    .section {
+      padding: 100px 0;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .section.hidden {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s var(--ease-smooth);
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 7vw, 64px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--text-primary);
+    }
+
+    h3 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .highlight {
+      color: var(--accent-gold);
+      position: relative;
+    }
+
+    .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 0.1em;
+      left: 0; right: 0;
+      height: 0.15em;
+      background: var(--accent-gold);
+      opacity: 0.3;
+      border-radius: 2px;
+    }
+
+    p {
+      color: var(--text-secondary);
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+
+    p.lead {
+      font-size: 20px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .emphasis-text {
+      font-style: italic;
+      color: var(--text-primary);
+      border-left: 3px solid var(--accent-gold);
+      padding-left: 20px;
+      margin: 32px 0;
+      font-size: 17px;
+    }
+
+    .section-number {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-green);
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .subhead {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      max-width: 520px;
+    }
+
+    a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    a:hover {
+      color: var(--accent-gold);
+    }
+
+    /* ===== COMPONENTS ===== */
+    .terminal-window {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-2xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-terminal);
+      animation: windowFadeIn 0.8s ease-out;
+    }
+
+    .terminal-header {
+      background: var(--gradient-terminal-header);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .terminal-dots { display: flex; gap: 8px; }
+    .terminal-dot { width: 12px; height: 12px; border-radius: 50%; background: #333; }
+    .terminal-dot.red { background: var(--color-error); }
+    .terminal-dot.yellow { background: var(--color-warning); }
+    .terminal-dot.green { background: var(--color-success); }
+
+    .terminal-title {
+      flex: 1;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      text-transform: lowercase;
+    }
+
+    .terminal-body {
+      padding: 40px 40px 56px;
+      position: relative;
+    }
+
+    @media (max-width: 600px) {
+      .terminal-body { padding: 28px 24px 40px; }
+    }
+
+    .command-line {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--accent-green);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .command-line .prompt { color: var(--text-muted); flex-shrink: 0; }
+    .command-line .typed-text { overflow: hidden; white-space: nowrap; animation: typing 1.5s steps(40) 0.3s forwards; width: 0; }
+    .command-line .cursor { display: inline-block; width: 10px; height: 20px; background: var(--accent-green); animation: blink 1s step-end infinite; flex-shrink: 0; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-green-dim);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      color: var(--accent-green);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .badge--gold {
+      background: rgba(255, 214, 10, 0.1);
+      border: 1px solid rgba(255, 214, 10, 0.2);
+      color: var(--accent-gold);
+    }
+
+    .cta-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent-gold);
+      color: var(--bg-primary);
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      padding: 16px 32px;
+      border-radius: var(--radius-lg);
+      text-decoration: none;
+      transition: all 0.25s var(--ease-smooth);
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-primary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .cta-primary:hover::before { left: 100%; }
+
+    .cta-primary:hover {
+      background: #ffe456;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-cta-hover);
+      color: var(--bg-primary);
+    }
+
+    .cta-primary svg {
+      width: 18px; height: 18px;
+      transition: transform 0.25s ease;
+    }
+
+    .cta-primary:hover svg { transform: translateX(4px); }
+
+    /* Skill Cards */
+    .skill-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin-bottom: 10px;
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 16px;
+      transition: all 0.3s var(--ease-smooth);
+      cursor: default;
+    }
+
+    .skill-card:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--accent-gold);
+      transform: translateX(4px);
+      box-shadow: -4px 0 0 var(--accent-gold);
+    }
+
+    .skill-number {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent-gold);
+      font-weight: 600;
+      opacity: 0.7;
+    }
+
+    .skill-card:hover .skill-number { opacity: 1; }
+
+    .skill-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 15px;
+      color: var(--text-primary);
+    }
+
+    .skill-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* Platform Cards */
+    .platform-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 24px 16px;
+      text-align: center;
+      transition: all 0.25s ease;
+    }
+
+    .platform-card:hover {
+      border-color: var(--accent-green);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-green-hover);
+    }
+
+    .platform-icon { font-size: 32px; margin-bottom: 12px; }
+
+    .platform-card h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .platform-card p {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      margin: 0;
+    }
+
+    /* Code Compare */
+    .code-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 40px 0;
+    }
+
+    @media (max-width: 700px) {
+      .code-compare { grid-template-columns: 1fr; }
+    }
+
+    .code-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .code-block:hover { transform: translateY(-2px); }
+
+    .code-block.negative { border-color: rgba(255, 95, 87, 0.3); }
+    .code-block.negative:hover { box-shadow: 0 20px 40px rgba(255, 95, 87, 0.1); }
+    .code-block.positive { border-color: rgba(0, 255, 136, 0.3); }
+    .code-block.positive:hover { box-shadow: 0 20px 40px rgba(0, 255, 136, 0.1); }
+
+    .code-header {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .code-block.negative .code-header { color: var(--color-error); background: rgba(255, 95, 87, 0.05); }
+    .code-block.positive .code-header { color: var(--accent-green); background: rgba(0, 255, 136, 0.05); }
+
+    .code-content {
+      padding: 20px 18px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    .code-content .result {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--border-color);
+      font-weight: 500;
+    }
+
+    .code-block.negative .result { color: var(--color-error); }
+    .code-block.positive .result { color: var(--accent-green); }
+
+    /* Check / X Lists */
+    .check-list { list-style: none; margin: 28px 0; padding: 0; }
+
+    .check-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    .check-list li::before {
+      content: '';
+      display: block;
+      width: 20px; height: 20px;
+      background: var(--accent-green-dim);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+      margin-top: 2px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300ff88' stroke-width='3'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E");
+      background-size: 12px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    /* Hello Bar */
+    .hello-bar {
+      background: var(--gradient-hello-bar);
+      border-bottom: 1px solid rgba(255, 214, 10, 0.3);
+      padding: 12px 24px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-primary);
+      position: relative;
+      z-index: 10;
+    }
+
+    .hello-bar-highlight {
+      color: var(--accent-gold);
+      font-weight: 600;
+    }
+
+    /* Final CTA */
+    .final-cta {
+      text-align: center;
+      padding: 100px 0 140px;
+      border-top: 1px solid var(--border-subtle);
+      position: relative;
+    }
+
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(255, 214, 10, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 48px 0;
+      text-align: center;
+    }
+
+    .footer p { font-size: 14px; color: var(--text-muted); }
+    .footer .built-note { margin-top: 10px; font-style: italic; font-size: 13px; }
+
+    /* Grids */
+    .platforms-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .platforms-grid { grid-template-columns: 1fr; }
+    }
+
+    .layer-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      margin-top: 40px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .layer-label:first-child { margin-top: 0; }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes windowFadeIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes typing { to { width: 100%; } }
+    @keyframes blink { 50% { opacity: 0; } }
+    @keyframes badgeFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes heroFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .animate-badge { animation: badgeFadeIn 0.5s ease-out 1.8s both; }
+    .animate-hero-1 { animation: heroFadeIn 0.6s ease-out 2.0s both; }
+    .animate-hero-2 { animation: heroFadeIn 0.6s ease-out 2.1s both; }
+    .animate-hero-3 { animation: heroFadeIn 0.6s ease-out 2.2s both; }
+    .animate-hero-4 { animation: heroFadeIn 0.6s ease-out 2.3s both; }
+    .animate-hero-5 { animation: heroFadeIn 0.6s ease-out 2.4s both; }
+
+    /* ===== PAGE-SPECIFIC STYLES ===== */
+
+    /* Evolution timeline */
+    .evo-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 40px;
+    }
+
+    .evo-step {
+      display: grid;
+      grid-template-columns: 120px 1fr 1fr;
+      gap: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 16px 20px;
+      transition: all 0.3s var(--ease-smooth);
+      position: relative;
+    }
+
+    .evo-step:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+    .evo-step:last-child { border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+
+    .evo-step:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--accent-gold);
+      z-index: 2;
+    }
+
+    .evo-step.active {
+      background: rgba(255, 214, 10, 0.03);
+      border-color: rgba(255, 214, 10, 0.3);
+    }
+
+    .evo-stage {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+    }
+
+    .evo-step.active .evo-stage { color: var(--accent-gold); }
+
+    .evo-unlocks {
+      font-size: 13px;
+      color: var(--text-secondary);
+      padding-right: 16px;
+    }
+
+    .evo-limit {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+    }
+
+    @media (max-width: 700px) {
+      .evo-step {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .evo-limit { margin-top: 4px; }
+    }
+
+    /* Hosts section */
+    .hosts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 600px) {
+      .hosts-grid { grid-template-columns: 1fr; }
+    }
+
+    .host-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 32px 28px;
+      transition: all 0.3s ease;
+    }
+
+    .host-card:hover {
+      border-color: var(--accent-gold);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .host-role {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent-green);
+      margin-bottom: 12px;
+    }
+
+    .host-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .host-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Agenda */
+    .agenda-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 40px;
+    }
+
+    .agenda-item {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 16px 20px;
+      transition: all 0.3s var(--ease-smooth);
+    }
+
+    .agenda-item:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+    .agenda-item:last-child { border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+
+    .agenda-item:hover {
+      background: var(--bg-tertiary);
+      border-color: rgba(255, 214, 10, 0.2);
+    }
+
+    .agenda-time {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent-gold);
+      font-weight: 500;
+      padding-top: 2px;
+    }
+
+    .agenda-block {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .agenda-detail {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    @media (max-width: 500px) {
+      .agenda-item {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+    }
+
+    /* Prereqs numbered list */
+    .prereq-list {
+      list-style: none;
+      margin: 32px 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .prereq-item {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      transition: all 0.3s var(--ease-smooth);
+    }
+
+    .prereq-item:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--accent-green);
+      transform: translateX(4px);
+      box-shadow: -4px 0 0 var(--accent-green);
+    }
+
+    .prereq-num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent-green);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+
+    .prereq-name {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .prereq-note {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 0;
+      font-family: var(--font-mono);
+    }
+
+    /* Methodology comparison table */
+    .method-table {
+      width: 100%;
+      margin: 32px 0;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .method-table th {
+      background: var(--bg-tertiary);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .method-table th:first-child { color: var(--accent-gold); }
+    .method-table th.col-site { color: var(--accent-green); }
+    .method-table th.col-reno { color: var(--accent-gold); }
+
+    .method-table td {
+      padding: 12px 18px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: top;
+    }
+
+    .method-table tr:last-child td { border-bottom: none; }
+
+    .method-table td:first-child {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .method-table tr:hover td {
+      background: rgba(255, 214, 10, 0.02);
+    }
+
+    /* Seats counter */
+    .seats-display {
+      font-family: var(--font-mono);
+      font-size: clamp(48px, 8vw, 72px);
+      font-weight: 700;
+      color: var(--accent-gold);
+      text-shadow: 0 0 60px rgba(255, 214, 10, 0.4);
+      margin-bottom: 8px;
+    }
+
+    .seats-label {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      margin-bottom: 40px;
+    }
+
+    /* Spacer */
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+      margin-bottom: 32px;
+    }
+
+    .meta-pill {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 50px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .meta-pill .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent-green);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hello Bar -->
+  <div class="hello-bar">
+    <span class="hello-bar-highlight">12 seats only</span> — Sunday, February 15th — Amsterdam
+  </div>
+
+  <div class="container">
+
+    <!-- ===== HERO ===== -->
+    <div class="terminal-window" style="margin-top: 60px;">
+      <div class="terminal-header">
+        <div class="terminal-dots">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+        </div>
+        <span class="terminal-title">~/superhuman-workshop</span>
+      </div>
+      <div class="terminal-body">
+        <div class="command-line">
+          <span class="prompt">$</span>
+          <span class="typed-text">claude "make me superhuman"</span>
+          <span class="cursor"></span>
+        </div>
+
+        <div class="badge animate-badge">Live Workshop &bull; Feb 15</div>
+
+        <h1 class="animate-hero-1" style="margin-top: 20px;">
+          From Chatbots<br>to <span class="highlight">Conductors.</span>
+        </h1>
+
+        <p class="subhead animate-hero-2" style="margin-top: 20px;">
+          Build your personal website & learn the spec-driven methodology for any project — coding, renovating, or business.
+        </p>
+
+        <div class="hero-meta animate-hero-3">
+          <span class="meta-pill"><span class="dot"></span> Sunday, Feb 15th</span>
+          <span class="meta-pill">12:00 – 17:00</span>
+          <span class="meta-pill">Amsterdam</span>
+          <span class="meta-pill">12 seats</span>
+        </div>
+
+        <a href="#rsvp" class="cta-primary animate-hero-4">
+          Claim Your Seat
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+
+        <p class="animate-hero-5" style="font-size: 13px; color: var(--text-muted); margin-top: 16px; font-family: var(--font-mono);">
+          Leave with a deployed site AND a new operating system for execution.
+        </p>
+      </div>
+    </div>
+
+    <!-- ===== THE WHY ===== -->
+    <section class="section hidden">
+      <span class="section-number">01 — The problem</span>
+      <h2>You're driving a sports car<br>to the <span class="highlight">mailbox.</span></h2>
+
+      <div class="emphasis-text">
+        Using AI as a chatbot barely scratches the surface. What's changed isn't that AI got smarter — it's that we've figured out how to <em>work with it.</em>
+      </div>
+
+      <p>The breakthrough isn't better models. It's better workflows. Break big problems into small focused pieces. Create plans and specs. Orchestrate multiple AI agents the way a project manager coordinates a team.</p>
+
+      <p>This approach works for code — but it works equally well for <strong style="color: var(--text-primary);">any structured project.</strong></p>
+
+      <!-- Side-by-side comparison -->
+      <div class="code-compare" style="margin-top: 48px;">
+        <div class="code-block negative">
+          <div class="code-header">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff5f57" stroke-width="2"><path d="M6 6l12 12M6 18L18 6"/></svg>
+            How most people use AI
+          </div>
+          <div class="code-content">
+            "Hey ChatGPT, build me a website"<br><br>
+            &rarr; Generic output<br>
+            &rarr; No structure<br>
+            &rarr; Endless back-and-forth<br>
+            &rarr; Nothing ships
+            <div class="result">Result: Frustration</div>
+          </div>
+        </div>
+        <div class="code-block positive">
+          <div class="code-header">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg>
+            Spec-driven orchestration
+          </div>
+          <div class="code-content">
+            Vision &rarr; Spec &rarr; Execute &rarr; Verify<br><br>
+            &rarr; Scoped tasks<br>
+            &rarr; AI agents in parallel<br>
+            &rarr; Self-checking output<br>
+            &rarr; Deployed in hours
+            <div class="result">Result: Shipped &amp; live</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== METHODOLOGY: UNIVERSAL PATTERN ===== -->
+    <section class="section hidden">
+      <span class="section-number">02 — The methodology</span>
+      <h2>One pattern. <span class="highlight">Any</span> project.</h2>
+
+      <p style="max-width: 560px;">The spec-driven workflow isn't a software technique. It's a project management methodology that happens to work incredibly well with AI. If you can describe a goal and break it into parts, you can use it.</p>
+
+      <table class="method-table">
+        <thead>
+          <tr>
+            <th>Step</th>
+            <th class="col-site">Personal Website</th>
+            <th class="col-reno">Apartment Renovation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Vision</td>
+            <td>A site that showcases my work and lets me blog</td>
+            <td>A comfortable, modern apartment that feels like home</td>
+          </tr>
+          <tr>
+            <td>Break down</td>
+            <td>Homepage, About, Blog, Projects, Contact</td>
+            <td>Living room, Kitchen, Bedroom, Bathroom, Hallway</td>
+          </tr>
+          <tr>
+            <td>Research</td>
+            <td>AI researches design trends, CMS options</td>
+            <td>AI researches materials, prices, regulations</td>
+          </tr>
+          <tr>
+            <td>Plan</td>
+            <td>Feature list, tech stack, phased rollout</td>
+            <td>Room-by-room budget, timeline, dependencies</td>
+          </tr>
+          <tr>
+            <td>Execute</td>
+            <td>"Build hero section," "connect CMS," "deploy"</td>
+            <td>"Get 3 quotes," "order tiles," "schedule electrician"</td>
+          </tr>
+          <tr>
+            <td>Verify</td>
+            <td>AI self-checks code, runs tests, you review</td>
+            <td>Review quotes vs budget, check samples, adjust</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="emphasis-text">
+        The point is not that AI will tile your bathroom. The point is that the hard part of any project — the structuring, research, planning, tracking — is exactly what AI is good at when you give it the right workflow.
+      </div>
+    </section>
+
+    <!-- ===== THE EVOLUTION ===== -->
+    <section class="section hidden">
+      <span class="section-number">03 — The evolution</span>
+      <h2>How we got here.</h2>
+      <p style="margin-bottom: 0;">Each stage solves a limitation of the previous one. The final insight: the breakthrough isn't better models — it's better workflows.</p>
+
+      <div class="evo-grid">
+        <div class="evo-step">
+          <div class="evo-stage">Chat / LLM</div>
+          <div class="evo-unlocks">Instant knowledge, writing, brainstorming</div>
+          <div class="evo-limit">Can only talk. Can't do anything.</div>
+        </div>
+        <div class="evo-step">
+          <div class="evo-stage">Agent</div>
+          <div class="evo-unlocks">Multi-step reasoning. Plans and iterates.</div>
+          <div class="evo-limit">Sandboxed. No access to your tools.</div>
+        </div>
+        <div class="evo-step">
+          <div class="evo-stage">MCP & Tools</div>
+          <div class="evo-unlocks">Reads email, searches files, calls APIs</div>
+          <div class="evo-limit">Cloud only. Can't touch your machine.</div>
+        </div>
+        <div class="evo-step">
+          <div class="evo-stage">Claude Code</div>
+          <div class="evo-unlocks">Read, write, run, test code — your terminal</div>
+          <div class="evo-limit">Context window limits.</div>
+        </div>
+        <div class="evo-step">
+          <div class="evo-stage">Spec-Driven</div>
+          <div class="evo-unlocks">Reliable execution of complex projects</div>
+          <div class="evo-limit">Manual orchestration still required.</div>
+        </div>
+        <div class="evo-step active">
+          <div class="evo-stage">GSD &rarr;</div>
+          <div class="evo-unlocks">You become the conductor. Agents work in parallel, self-verify.</div>
+          <div class="evo-limit" style="color: var(--accent-gold);">The frontier. Where we are today.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== THE TOOLKIT ===== -->
+    <section class="section hidden" style="text-align: center;">
+      <span class="section-number">04 — The toolkit</span>
+      <h2>Three layers. One workflow.</h2>
+      <p style="max-width: 480px; margin: 0 auto 40px;">You'll learn to use all three together — the engine, the connections, and the framework.</p>
+
+      <div class="platforms-grid">
+        <div class="platform-card">
+          <div class="platform-icon">&#9000;</div>
+          <h4>Claude Code</h4>
+          <p>AI in your terminal</p>
+        </div>
+        <div class="platform-card">
+          <div class="platform-icon">&#128268;</div>
+          <h4>MCP</h4>
+          <p>connects your tools</p>
+        </div>
+        <div class="platform-card">
+          <div class="platform-icon">&#9889;</div>
+          <h4>GSD Framework</h4>
+          <p>orchestrates execution</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== WHAT YOU'LL BUILD ===== -->
+    <section class="section hidden">
+      <span class="section-number">05 — The output</span>
+      <h2>What you'll walk away with.</h2>
+
+      <ul class="check-list">
+        <li>A live personal website (Next.js + Tailwind) deployed on Vercel</li>
+        <li>The spec-driven methodology for any project — digital or physical</li>
+        <li>Hands-on experience with Claude Code, MCP, and GSD</li>
+        <li>A mental model for orchestrating AI agents, not just chatting</li>
+        <li>A template repo you can fork and customize for future projects</li>
+      </ul>
+
+      <div class="emphasis-text">
+        Not by becoming a programmer — by becoming a conductor.
+      </div>
+    </section>
+
+    <!-- ===== YOUR HOSTS ===== -->
+    <section class="section hidden">
+      <span class="section-number">06 — Your hosts</span>
+      <h2>Who's running this.</h2>
+
+      <div class="hosts-grid">
+        <div class="host-card">
+          <div class="host-role">CTO</div>
+          <div class="host-name">Konstantin</div>
+          <p class="host-desc">The technical deep dive. Code, the GSD framework, terminal workflows. Konstantin will walk you through the architecture and live-code alongside you.</p>
+        </div>
+        <div class="host-card">
+          <div class="host-role">CMO</div>
+          <div class="host-name">Bo-Peter</div>
+          <p class="host-desc">The strategic application. How to apply spec-driven orchestration to any project — managing the narrative and bridging the gap for non-coders.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== AGENDA ===== -->
+    <section class="section hidden">
+      <span class="section-number">07 — The agenda</span>
+      <h2>How the day unfolds.</h2>
+      <p>~5 hours. Presentation first, then hands-on building with two facilitators floating.</p>
+
+      <div class="agenda-grid">
+        <div class="agenda-item">
+          <div class="agenda-time">12:00</div>
+          <div>
+            <div class="agenda-block">Welcome & Setup</div>
+            <p class="agenda-detail">Confirm prerequisites. Quick troubleshooting.</p>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">12:05</div>
+          <div>
+            <div class="agenda-block">The Evolution Story</div>
+            <p class="agenda-detail">Walk through the 6 stages: Chat &rarr; Agent &rarr; MCP &rarr; Claude Code &rarr; Spec-Driven &rarr; GSD. Live demos.</p>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">12:25</div>
+          <div>
+            <div class="agenda-block">The Methodology Moment</div>
+            <p class="agenda-detail">Website vs. apartment renovation side-by-side. The universal pattern. Interactive discussion.</p>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">12:35</div>
+          <div>
+            <div class="agenda-block">Live Demo: GSD</div>
+            <p class="agenda-detail">Full cycle on the TV: create a spec, GSD breaks it into tasks, executes, self-checks.</p>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">12:45</div>
+          <div>
+            <div class="agenda-block">Fork & First Run</div>
+            <p class="agenda-detail">Everyone forks the template, runs dev server, triggers first GSD task together.</p>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">12:55</div>
+          <div>
+            <div class="agenda-block">Build Session</div>
+            <p class="agenda-detail">Work on your site. Milestones: personalize content, add a section, connect Sanity, deploy to Vercel.</p>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">15:50</div>
+          <div>
+            <div class="agenda-block">Deploy & Show</div>
+            <p class="agenda-detail">Everyone deploys. Round-the-room share of live URLs on the TV. Celebrate.</p>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">16:05</div>
+          <div>
+            <div class="agenda-block">Reflection & Next Steps</div>
+            <p class="agenda-detail">What surprised you? What would you apply this to? Share resources. Wind down.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRE-REQUISITES ===== -->
+    <section class="section hidden">
+      <span class="section-number">08 — Before you arrive</span>
+      <h2>Pre-requisites.</h2>
+      <p>Must be installed and working <strong style="color: var(--text-primary);">before Sunday.</strong> We'll send setup instructions one week prior and host a 30-min setup call on Saturday to troubleshoot.</p>
+
+      <div class="prereq-list">
+        <div class="prereq-item">
+          <div class="prereq-num">01</div>
+          <div>
+            <div class="prereq-name">Claude Code CLI</div>
+            <p class="prereq-note">The AI agent that runs in your terminal. Requires Claude Pro or API key.</p>
+          </div>
+        </div>
+        <div class="prereq-item">
+          <div class="prereq-num">02</div>
+          <div>
+            <div class="prereq-name">Node.js (v20+)</div>
+            <p class="prereq-note">Required for Next.js and the dev toolchain.</p>
+          </div>
+        </div>
+        <div class="prereq-item">
+          <div class="prereq-num">03</div>
+          <div>
+            <div class="prereq-name">Git + GitHub Account</div>
+            <p class="prereq-note">For forking the template and deploying via Vercel.</p>
+          </div>
+        </div>
+        <div class="prereq-item">
+          <div class="prereq-num">04</div>
+          <div>
+            <div class="prereq-name">Vercel Account</div>
+            <p class="prereq-note">One-click deployment. Free tier is fine.</p>
+          </div>
+        </div>
+        <div class="prereq-item">
+          <div class="prereq-num">05</div>
+          <div>
+            <div class="prereq-name">VS Code + Terminal</div>
+            <p class="prereq-note">For running Claude Code and viewing the project.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer-label">Recommended reading</div>
+      <p style="font-size: 14px;">Come with a basic understanding of these concepts — we'll go deep on the day:</p>
+      <ul class="check-list">
+        <li><strong style="color: var(--text-primary);">MCP (Model Context Protocol)</strong> — the standard way to connect AI agents to external tools: databases, APIs, services. Think of it as USB-C for AI.</li>
+        <li><strong style="color: var(--text-primary);">Agents vs. Chat</strong> — why multi-step AI agents that can plan and iterate are fundamentally different from a chatbot.</li>
+        <li><strong style="color: var(--text-primary);">Spec-Driven Development</strong> — breaking work into small, scoped, AI-executable specs instead of one giant prompt.</li>
+      </ul>
+    </section>
+
+    <!-- ===== RSVP ===== -->
+    <div class="final-cta" id="rsvp">
+      <span class="section-number">09 — Claim your seat</span>
+      <div class="seats-display">12</div>
+      <p class="seats-label">seats available</p>
+
+      <h2 style="margin-bottom: 16px;">Ready to become a <span class="highlight">conductor?</span></h2>
+      <p style="max-width: 440px; margin: 0 auto 40px; font-size: 15px;">
+        Sunday, February 15th &bull; 12:00 – 17:00 &bull; Amsterdam<br>
+        <span style="color: var(--text-muted); font-size: 13px;">Intimate apartment setting. Laptops required. Coffee provided.</span>
+      </p>
+
+      <a href="#" class="cta-primary" style="animation: none; font-size: 17px; padding: 18px 40px;" onclick="return false;" id="rsvp-btn">
+        Claim One of 12 Seats
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+
+      <p style="margin-top: 20px; font-size: 12px; color: var(--text-muted); font-family: var(--font-mono);">
+        RSVP link coming soon — spots fill fast
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Superhuman: From Chatbots to Conductors</p>
+      <p class="built-note">This page was built with Claude Code.</p>
+    </footer>
+
+  </div>
+
+  <!-- Scroll reveal -->
+  <script>
+    const sections = document.querySelectorAll('.section.hidden');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          entry.target.classList.remove('hidden');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    sections.forEach(section => observer.observe(section));
+  </script>
+
+</body>
+</html>
