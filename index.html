@@ -50,7 +50,8 @@
     }
 
     /* ===== BASE ===== */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { overflow-x: hidden; }
 
     body {
       font-family: var(--font-display);
@@ -110,11 +111,13 @@
     /* ===== TYPOGRAPHY ===== */
     h1 {
       font-family: var(--font-display);
-      font-size: clamp(40px, 7vw, 64px);
+      font-size: clamp(36px, 7vw, 64px);
       font-weight: 800;
       line-height: 1.05;
       letter-spacing: -0.03em;
       color: var(--text-primary);
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
 
     h2 {
@@ -124,6 +127,7 @@
       letter-spacing: -0.02em;
       line-height: 1.2;
       color: var(--text-primary);
+      overflow-wrap: break-word;
     }
 
     h3 {
@@ -152,7 +156,7 @@
 
     p {
       color: var(--text-secondary);
-      font-size: 16px;
+      font-size: 18px;
       margin-bottom: 16px;
     }
 
@@ -239,7 +243,7 @@
     }
 
     @media (max-width: 600px) {
-      .terminal-body { padding: 28px 24px 40px; }
+      .terminal-body { padding: 28px 20px 40px; }
     }
 
     .command-line {
@@ -448,6 +452,7 @@
       font-size: 13px;
       line-height: 1.8;
       color: var(--text-secondary);
+      overflow-wrap: break-word;
     }
 
     .code-content .result {
@@ -847,6 +852,11 @@
 
     .method-table tr:hover td {
       background: rgba(255, 214, 10, 0.02);
+    }
+
+    @media (max-width: 600px) {
+      .method-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .method-table td:first-child { white-space: normal; }
     }
 
     /* Seats counter */
