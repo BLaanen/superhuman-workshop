@@ -10,14 +10,40 @@
 - **Approach:** Empathy Narrative — start from their frustration, build understanding layer by layer
 - **Scope:** Content restructure + visual design tweaks
 
-## Slide Structure (~30 slides)
+## Slide Structure (~35 slides)
 
-### Section 1: Opening (Slides 1-3)
+### Section 0: The Moment (Slides 1-5) — NEW
 
 **Slide 1 — Title**
 - Title: "From Chatting to Building."
 - Subtitle: "What happens when you stop asking AI questions and start building real things with it."
 - Keep: SUPERHUMAN WORKSHOP label, current visual styling
+
+**Slide 2 — "Something is happening."**
+- Aspirational quotes:
+  - Dario Amodei (Anthropic CEO): "When will we see the first one-person billion-dollar company? **2026.**"
+  - Sam Altman (OpenAI CEO): "You'll have billion-dollar companies run by two or three people with AI."
+
+**Slide 3 — "The numbers are insane."**
+- Key stats:
+  - 41% of all code is now AI-generated
+  - 25% of YC startups have codebases that are 95% AI-generated
+  - App Store saw its biggest wave of new releases since 2016 — up 24%
+  - 92% of US developers use AI coding tools daily
+
+**Slide 4 — "Most people are sleeping on this."**
+- Statement: "These tools exist right now. They're not experimental."
+- Proof points:
+  - Cursor hit $1B ARR in 17 months with <50 employees
+  - Replit grew 2,352% in one year
+  - A solo founder sold his AI-built startup for $80M
+- Punchline: "The tools you'll learn today are the ones making this happen."
+
+**Slide 5 — Transition**
+- "And most people are still using AI like this..."
+- Flows into the existing "ChatGPT for quick things" narrative
+
+### Section 1: Opening (Slides 6-7)
 
 **Slide 2 — Statement**
 - "You've used ChatGPT. It's great for quick things — emails, brainstorming, explaining concepts. You type, it answers."
@@ -205,6 +231,16 @@ Each row staggers in with animation.
 - "Ready to build?"
 - Flow: Vision → Spec → Plan → Build → Verify → Ship
 - "Let's go."
+
+### Section 8.5: Case Study — Bo (after Walkthrough, before Universal) — NEW
+
+**Slide — "Case Study: Bo"**
+- Real-world proof that this isn't hypothetical
+- What Bo built, timeline, the fact he did it independently
+- [PLACEHOLDER: Fill in Bo's specific details later]
+- Visual: Timeline or before/after showing his progression
+
+---
 
 ## Design Tweaks
 

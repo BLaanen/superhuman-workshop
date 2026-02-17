@@ -2,13 +2,165 @@
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Restructure the Superhuman Workshop presentation from 28 to ~31 slides, improving narrative flow around ChatGPT limitations, context windows, team roles, and the GSD mapping reveal.
+**Goal:** Restructure the Superhuman Workshop presentation from 28 to ~35 slides, adding "The Moment" opening with stats/quotes, improving ChatGPT limitation narrative, context windows, team roles, GSD mapping reveal, and a Bo case study.
 
 **Architecture:** Single-file HTML slide deck (`presentation.html`) with embedded CSS and JS. The existing slide engine (keyboard/touch/click navigation, progress bar, stagger animations) stays intact. We add new CSS components (chat bubbles, team grid, two-column mapping) and restructure the slide HTML content.
 
 **Tech Stack:** Vanilla HTML/CSS/JS, Google Fonts (Space Grotesk + Instrument Serif)
 
 **Design doc:** `docs/plans/2026-02-17-presentation-redesign-design.md`
+
+---
+
+### Task 0: Add "The Moment" CSS + Stats Slides (New Section 0)
+
+**Files:**
+- Modify: `presentation.html` — add CSS for stat cards and quote styling, then add 4 new slides after the title
+
+**Step 1: Add stat/quote CSS styles**
+
+Add before the `@media` query:
+
+```css
+/* ===== STAT CARDS ===== */
+.stat-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  width: 100%; margin-top: 40px;
+}
+
+.stat-card {
+  padding: 28px 24px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 12px;
+  text-align: center;
+}
+
+.stat-card .stat-num {
+  font-size: 48px; font-weight: 700; color: var(--accent);
+  line-height: 1; margin-bottom: 8px;
+}
+
+.stat-card .stat-label {
+  font-size: 18px; color: var(--text-dim); line-height: 1.4;
+}
+
+/* ===== QUOTE BLOCKS ===== */
+.quote-block {
+  border-left: 3px solid var(--accent); padding: 20px 28px;
+  margin-bottom: 20px; background: var(--accent-dim);
+  border-radius: 0 12px 12px 0;
+}
+
+.quote-block .quote-text {
+  font-family: var(--serif); font-style: italic;
+  font-size: 28px; color: var(--text); line-height: 1.4;
+  margin: 0 0 8px;
+}
+
+.quote-block .quote-attr {
+  font-size: 16px; color: var(--text-faint); font-weight: 600;
+  margin: 0;
+}
+
+/* ===== PROOF POINTS ===== */
+.proof-point {
+  padding: 16px 0; border-bottom: 1px solid var(--border);
+  font-size: 24px; color: var(--text-dim);
+}
+
+.proof-point:last-child { border: none; }
+.proof-point .proof-hl { color: var(--accent); font-weight: 700; }
+```
+
+**Step 2: Add slide 2 — quotes**
+
+Insert after slide 1 (title):
+
+```html
+<!-- 2: THE MOMENT - QUOTES -->
+<div class="slide">
+  <div class="content stagger">
+    <div class="label">The Moment</div>
+    <h2>Something is <span class="hl">happening.</span></h2>
+    <div style="margin-top: 32px;">
+      <div class="quote-block">
+        <p class="quote-text">"When will we see the first one-person billion-dollar company? <span class="hl">2026.</span>"</p>
+        <p class="quote-attr">Dario Amodei, CEO of Anthropic (maker of Claude)</p>
+      </div>
+      <div class="quote-block">
+        <p class="quote-text">"You'll have billion-dollar companies run by <span class="hl">two or three people</span> with AI."</p>
+        <p class="quote-attr">Sam Altman, CEO of OpenAI</p>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+**Step 3: Add slide 3 — stats**
+
+```html
+<!-- 3: THE MOMENT - STATS -->
+<div class="slide">
+  <div class="content stagger">
+    <div class="label">The Numbers</div>
+    <h2>The numbers are <span class="hl">insane.</span></h2>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-num">41%</div>
+        <div class="stat-label">of all code is now<br>AI-generated</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">95%</div>
+        <div class="stat-label">AI-generated codebases<br>at 25% of YC startups</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">+24%</div>
+        <div class="stat-label">App Store submissions<br>biggest wave since 2016</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">92%</div>
+        <div class="stat-label">of US developers use<br>AI coding tools daily</div>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+**Step 4: Add slide 4 — proof points / sleeping on it**
+
+```html
+<!-- 4: SLEEPING ON IT -->
+<div class="slide">
+  <div class="content stagger">
+    <div class="label">Right Now</div>
+    <h2>Most people are<br><span class="hl">sleeping on this.</span></h2>
+    <div style="margin-top: 32px;">
+      <div class="proof-point"><span class="proof-hl">Cursor</span> hit $1B revenue in 17 months &mdash; with fewer than 50 employees</div>
+      <div class="proof-point"><span class="proof-hl">Replit</span> grew 2,352% in one year turning non-coders into builders</div>
+      <div class="proof-point">A <span class="proof-hl">solo founder</span> sold his AI-built startup for $80M in 6 months</div>
+      <div class="proof-point">MVP costs dropped from <span class="proof-hl">$80K / 4 months</span> to <span class="proof-hl">$2K / 8 days</span></div>
+    </div>
+    <p style="margin-top: 32px; font-size: 24px; color: var(--accent); font-weight: 600;">The tools you'll learn today are the ones making this happen.</p>
+  </div>
+</div>
+```
+
+**Step 5: Add slide 5 — transition**
+
+```html
+<!-- 5: TRANSITION -->
+<div class="slide">
+  <div class="content centered stagger">
+    <p class="statement">And most people<br>are still using AI<br><span class="hl">like this...</span></p>
+  </div>
+</div>
+```
+
+**Step 6: Verify slides 1-5 in browser, commit**
+
+```bash
+git add presentation.html
+git commit -m "content: add 'The Moment' opening slides with stats and quotes"
+```
 
 ---
 
@@ -1020,7 +1172,53 @@ git commit -m "content: add walkthrough and closing slides 28-31, complete redes
 
 ---
 
-### Task 10: Final Polish Pass
+### Task 10: Add Bo Case Study Slide (after Walkthrough)
+
+**Files:**
+- Modify: `presentation.html` — add one slide after the walkthrough (slide 28) and before the universal pattern
+
+**Step 1: Add the case study slide**
+
+Insert after the walkthrough slide:
+
+```html
+<!-- CASE STUDY: BO -->
+<div class="slide">
+  <div class="content stagger">
+    <div class="label">Case Study</div>
+    <h2>Meet <span class="hl">Bo.</span></h2>
+    <div style="margin-top: 32px;">
+      <!-- PLACEHOLDER: Fill in Bo's specific details -->
+      <div class="walk-steps">
+        <div class="walk-step">
+          <h4>Week 1</h4>
+          <p>[What Bo started with / first project]</p>
+        </div>
+        <div class="walk-step">
+          <h4>Week 2-3</h4>
+          <p>[What he built / key milestones]</p>
+        </div>
+        <div class="walk-step">
+          <h4>Today</h4>
+          <p>[Where he is now / what he's accomplished]</p>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top: 24px; font-size: 24px; color: var(--accent); font-weight: 600;">No coding experience. Just these tools and this process.</p>
+  </div>
+</div>
+```
+
+**Step 2: Verify, commit**
+
+```bash
+git add presentation.html
+git commit -m "content: add Bo case study slide (placeholder)"
+```
+
+---
+
+### Task 11: Final Polish Pass
 
 **Files:**
 - Modify: `presentation.html`
