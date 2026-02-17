@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Superhuman Workshop — Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0c0a09;
+      --text: #ede8e3;
+      --text-dim: #8a8279;
+      --text-faint: #4a453f;
+      --accent: #ff6b35;
+      --accent-dim: rgba(255,107,53,0.08);
+      --accent-soft: rgba(255,107,53,0.15);
+      --surface: #16130f;
+      --border: #231f1b;
+      --sans: 'Space Grotesk', system-ui, sans-serif;
+      --serif: 'Instrument Serif', Georgia, serif;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== SLIDES ===== */
+    .deck { width: 100%; height: 100%; position: relative; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 100px;
+      opacity: 0; pointer-events: none;
+      transform: translateX(50px);
+      transition: none;
+      overflow-y: auto;
+    }
+
+    .slide.transitioning {
+      transition: opacity 0.45s cubic-bezier(0.4,0,0.2,1), transform 0.45s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; z-index: 2; }
+    .slide.to-left { transform: translateX(-50px); }
+    .slide.to-right { transform: translateX(50px); }
+
+    .slide .content { max-width: 1200px; width: 100%; }
+
+    /* ===== PROGRESS ===== */
+    .progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: var(--accent); z-index: 100;
+      transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .nav-hint {
+      position: fixed; bottom: 28px; right: 40px;
+      font-size: 14px; color: var(--text-faint); z-index: 100;
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    /* ===== TYPE ===== */
+    .slide h1 {
+      font-family: var(--sans);
+      font-size: clamp(52px, 6vw, 88px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+    }
+
+    .slide h2 {
+      font-family: var(--sans);
+      font-size: clamp(44px, 5vw, 72px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .slide h3 {
+      font-size: 36px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .slide p {
+      font-size: 28px;
+      color: var(--text-dim);
+      line-height: 1.5;
+      max-width: 800px;
+    }
+
+    .slide p.xl {
+      font-size: 36px;
+      color: var(--text);
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .slide p.statement {
+      font-family: var(--serif);
+      font-size: clamp(36px, 4vw, 56px);
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.3;
+      max-width: 900px;
+    }
+
+    .hl { color: var(--accent); }
+
+    .label {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-faint);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    /* ===== STAGGER ===== */
+    .stagger > * {
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .slide.active .stagger > *:nth-child(1) { opacity:1; transform:none; transition-delay:0.08s; }
+    .slide.active .stagger > *:nth-child(2) { opacity:1; transform:none; transition-delay:0.16s; }
+    .slide.active .stagger > *:nth-child(3) { opacity:1; transform:none; transition-delay:0.24s; }
+    .slide.active .stagger > *:nth-child(4) { opacity:1; transform:none; transition-delay:0.32s; }
+    .slide.active .stagger > *:nth-child(5) { opacity:1; transform:none; transition-delay:0.40s; }
+    .slide.active .stagger > *:nth-child(6) { opacity:1; transform:none; transition-delay:0.48s; }
+    .slide.active .stagger > *:nth-child(7) { opacity:1; transform:none; transition-delay:0.56s; }
+    .slide.active .stagger > *:nth-child(8) { opacity:1; transform:none; transition-delay:0.64s; }
+
+    /* ===== CENTERED ===== */
+    .centered { text-align: center; display: flex; flex-direction: column; align-items: center; }
+    .centered p { text-align: center; }
+
+    /* ===== LIMIT ROWS ===== */
+    .limit-row {
+      display: flex; gap: 32px; align-items: flex-start;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .limit-row:last-child { border: none; }
+    .limit-row .l-num {
+      font-size: 64px; font-weight: 700;
+      color: var(--accent); line-height: 1; flex-shrink: 0;
+      opacity: 0.3; min-width: 60px;
+    }
+    .limit-row h3 { font-size: 32px; margin-bottom: 8px; }
+    .limit-row p { font-size: 22px; color: var(--text-dim); margin: 0; }
+
+    /* ===== CONTEXT VIZ ===== */
+    .ctx-bars { margin-top: 40px; width: 100%; max-width: 800px; }
+    .ctx-bar {
+      height: 48px; border-radius: 8px; margin-bottom: 14px;
+      position: relative; overflow: hidden; background: var(--surface);
+    }
+    .ctx-bar .fill {
+      height: 100%; border-radius: 8px;
+      background: linear-gradient(90deg, var(--accent), rgba(255,107,53,0.2));
+    }
+    .ctx-bar.overflow .fill {
+      width: 150% !important;
+      background: linear-gradient(90deg, #dc2626, rgba(220,38,38,0.15));
+      mask-image: linear-gradient(90deg, #000 40%, transparent 100%);
+      -webkit-mask-image: linear-gradient(90deg, #000 40%, transparent 100%);
+    }
+    .ctx-bar .bar-label {
+      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      font-size: 18px; font-weight: 600; color: var(--bg); white-space: nowrap;
+    }
+    .ctx-bar.overflow .bar-label { color: var(--text); }
+    .slide.active .ctx-bar .fill { animation: growBar 0.8s cubic-bezier(0.4,0,0.2,1) forwards; }
+    @keyframes growBar { from { width: 0 !important; } }
+
+    .ctx-pieces { display: flex; gap: 10px; margin-top: 24px; width: 100%; max-width: 800px; }
+    .ctx-piece {
+      flex: 1; height: 48px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), rgba(255,107,53,0.3));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; font-weight: 600; color: var(--bg);
+    }
+
+    /* ===== NEED GRID ===== */
+    .need-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+      width: 100%; margin-top: 40px;
+    }
+    .need-item {
+      padding: 28px 32px;
+      border-left: 3px solid var(--accent);
+      background: var(--surface);
+      border-radius: 0 12px 12px 0;
+    }
+    .need-item h3 { font-size: 26px; margin-bottom: 6px; }
+    .need-item p { font-size: 20px; color: var(--text-dim); margin: 0; }
+
+    /* ===== EVOLUTION ===== */
+    .evo-stack { width: 100%; margin-top: 40px; }
+    .evo-row {
+      display: flex; align-items: center; gap: 24px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+    .evo-row:last-child { border: none; }
+    .evo-row .evo-stage {
+      font-size: 20px; font-weight: 700; min-width: 180px;
+      color: var(--text-dim);
+    }
+    .evo-row .evo-desc { font-size: 22px; color: var(--text-faint); }
+    .evo-row.current {
+      background: var(--accent-dim);
+      border-radius: 12px;
+      border: none;
+      margin: 8px 0;
+      padding: 20px 24px;
+    }
+    .evo-row.current .evo-stage { color: var(--accent); }
+    .evo-row.current .evo-desc { color: var(--text); font-weight: 500; }
+
+    /* ===== TOOL CARDS (varied layout) ===== */
+    .tool-feature {
+      display: flex; gap: 48px; align-items: flex-start;
+      margin-top: 40px; width: 100%;
+    }
+    .tool-feature .tool-icon {
+      font-size: 72px; line-height: 1; flex-shrink: 0;
+    }
+    .tool-feature h3 { font-size: 36px; margin-bottom: 12px; }
+    .tool-feature p { font-size: 24px; color: var(--text-dim); margin: 0 0 8px; max-width: 600px; }
+
+    /* ===== FLOW ===== */
+    .flow-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; margin: 48px 0; flex-wrap: wrap;
+    }
+    .flow-node {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px 32px;
+      font-weight: 600; font-size: 24px; text-align: center;
+    }
+    .flow-node.hl-node { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
+    .flow-arrow { color: var(--accent); font-size: 28px; }
+    .slide.active .flow-row > * { opacity: 0; animation: popIn 0.35s ease forwards; }
+    .slide.active .flow-row > :nth-child(1) { animation-delay: 0.15s; }
+    .slide.active .flow-row > :nth-child(2) { animation-delay: 0.25s; }
+    .slide.active .flow-row > :nth-child(3) { animation-delay: 0.35s; }
+    .slide.active .flow-row > :nth-child(4) { animation-delay: 0.45s; }
+    .slide.active .flow-row > :nth-child(5) { animation-delay: 0.55s; }
+    .slide.active .flow-row > :nth-child(6) { animation-delay: 0.65s; }
+    .slide.active .flow-row > :nth-child(7) { animation-delay: 0.75s; }
+    .slide.active .flow-row > :nth-child(8) { animation-delay: 0.85s; }
+    .slide.active .flow-row > :nth-child(9) { animation-delay: 0.95s; }
+    .slide.active .flow-row > :nth-child(10) { animation-delay: 1.05s; }
+    .slide.active .flow-row > :nth-child(11) { animation-delay: 1.15s; }
+    @keyframes popIn { from { opacity:0; transform: scale(0.85) translateY(8px); } to { opacity:1; transform: none; } }
+
+    /* ===== TEAM PROCESS ===== */
+    .team-step {
+      display: flex; gap: 24px; align-items: baseline;
+      padding: 20px 0; border-bottom: 1px solid var(--border);
+    }
+    .team-step:last-child { border: none; }
+    .team-step .ts-role {
+      font-size: 16px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; min-width: 140px; flex-shrink: 0;
+    }
+    .team-step .ts-role.biz { color: var(--accent); }
+    .team-step .ts-role.prod { color: #c084fc; }
+    .team-step .ts-role.eng { color: #34d399; }
+    .team-step .ts-role.qa { color: #38bdf8; }
+    .team-step .ts-action { font-size: 24px; color: var(--text-dim); }
+
+    /* ===== MAPPING TABLE ===== */
+    .map-table {
+      width: 100%; margin-top: 40px;
+      border-collapse: separate; border-spacing: 0;
+    }
+    .map-table th {
+      font-size: 16px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 2px; padding: 16px 24px; text-align: left;
+      border-bottom: 2px solid var(--border);
+    }
+    .map-table th:first-child { color: var(--text-dim); }
+    .map-table th:nth-child(2) { color: var(--text-faint); text-align: center; }
+    .map-table th:last-child { color: var(--accent); }
+    .map-table td {
+      padding: 16px 24px; font-size: 22px;
+      color: var(--text-dim); border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .map-table tr:last-child td { border: none; }
+    .map-table td:first-child { font-weight: 500; }
+    .map-table td:nth-child(2) { text-align: center; color: var(--text-faint); font-size: 20px; }
+    .map-table td:last-child { color: var(--accent); font-weight: 600; }
+
+    /* ===== HIERARCHY ===== */
+    .hierarchy { display: flex; flex-direction: column; align-items: center; gap: 0; margin-top: 40px; }
+    .h-node {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px 36px; text-align: center; min-width: 240px;
+    }
+    .h-node .h-label { font-size: 14px; font-weight: 700; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; }
+    .h-node .h-desc { font-size: 22px; color: var(--text-dim); margin-top: 2px; }
+    .h-connector { width: 2px; height: 20px; background: var(--accent); position: relative; }
+    .h-connector::after {
+      content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+      border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 7px solid var(--accent);
+    }
+    .h-branch { display: flex; gap: 16px; }
+    .h-branch .h-node { flex: 1; max-width: 220px; }
+
+    /* ===== COMMAND ROWS ===== */
+    .cmd-row {
+      display: flex; gap: 24px; align-items: baseline;
+      padding: 24px 0; border-bottom: 1px solid var(--border);
+    }
+    .cmd-row:last-child { border: none; }
+    .cmd-row .cmd-code {
+      font-size: 20px; font-weight: 700; color: var(--accent);
+      min-width: 280px; flex-shrink: 0;
+    }
+    .cmd-row .cmd-desc { font-size: 22px; color: var(--text-dim); }
+
+    /* ===== WALKTHROUGH TIMELINE ===== */
+    .walk-steps { margin-top: 40px; width: 100%; position: relative; padding-left: 40px; }
+    .walk-steps::before {
+      content: ''; position: absolute; left: 12px; top: 0; bottom: 0;
+      width: 3px; background: linear-gradient(to bottom, var(--accent), var(--text-faint));
+      border-radius: 2px;
+    }
+    .walk-step { padding: 16px 0; position: relative; }
+    .walk-step::before {
+      content: ''; position: absolute; left: -34px; top: 22px;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 16px rgba(255,107,53,0.3);
+    }
+    .walk-step:last-child::before { background: var(--text); box-shadow: 0 0 16px rgba(237,232,227,0.2); }
+    .walk-step h4 { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+    .walk-step p { font-size: 22px; color: var(--text-dim); margin: 0; }
+
+    /* ===== IDEA STRIPS ===== */
+    .idea-strip {
+      display: flex; gap: 32px; align-items: center;
+      padding: 24px 0; border-bottom: 1px solid var(--border);
+    }
+    .idea-strip:last-child { border: none; }
+    .idea-strip .i-icon { font-size: 40px; flex-shrink: 0; }
+    .idea-strip h4 { font-size: 28px; font-weight: 700; }
+    .idea-strip p { font-size: 20px; color: var(--text-dim); margin: 0; }
+
+    /* ===== OUTPUT LIST ===== */
+    .output-item {
+      padding: 24px 0; border-bottom: 1px solid var(--border);
+      display: flex; gap: 20px; align-items: flex-start;
+    }
+    .output-item:last-child { border: none; }
+    .output-item .o-marker {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0; margin-top: 12px;
+    }
+    .output-item h4 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+    .output-item p { font-size: 22px; color: var(--text-dim); margin: 0; }
+
+    /* ===== SESSION TRACK ===== */
+    .sessions {
+      display: flex; gap: 20px; width: 100%; margin-top: 40px;
+      position: relative; padding-bottom: 36px;
+    }
+    .sessions::after {
+      content: ''; position: absolute; bottom: 12px; left: 0; right: 0;
+      height: 3px; background: var(--accent); border-radius: 2px; opacity: 0.25;
+    }
+    .s-card {
+      flex: 1; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px; text-align: center; position: relative; z-index: 1;
+    }
+    .s-card::after {
+      content: ''; position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%);
+      width: 12px; height: 12px; border-radius: 50%; background: var(--accent);
+    }
+    .s-card h5 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .s-card p { font-size: 17px; color: var(--text-faint); margin: 0; }
+    .s-persist {
+      text-align: center; font-size: 16px; font-weight: 600;
+      color: var(--accent); margin-top: 12px; letter-spacing: 1px;
+    }
+
+    /* ===== STAT CARDS ===== */
+    .stat-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+      width: 100%; margin-top: 40px;
+    }
+
+    .stat-card {
+      padding: 28px 24px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 12px;
+      text-align: center;
+    }
+
+    .stat-card .stat-num {
+      font-size: 48px; font-weight: 700; color: var(--accent);
+      line-height: 1; margin-bottom: 8px;
+    }
+
+    .stat-card .stat-label {
+      font-size: 18px; color: var(--text-dim); line-height: 1.4;
+    }
+
+    /* ===== QUOTE BLOCKS ===== */
+    .quote-block {
+      border-left: 3px solid var(--accent); padding: 20px 28px;
+      margin-bottom: 20px; background: var(--accent-dim);
+      border-radius: 0 12px 12px 0;
+    }
+
+    .quote-block .quote-text {
+      font-family: var(--serif); font-style: italic;
+      font-size: 28px; color: var(--text); line-height: 1.4;
+      margin: 0 0 8px; max-width: none;
+    }
+
+    .quote-block .quote-attr {
+      font-size: 16px; color: var(--text-faint); font-weight: 600;
+      margin: 0;
+    }
+
+    /* ===== PROOF POINTS ===== */
+    .proof-point {
+      padding: 16px 0; border-bottom: 1px solid var(--border);
+      font-size: 24px; color: var(--text-dim);
+    }
+
+    .proof-point:last-child { border: none; }
+    .proof-point .proof-hl { color: var(--accent); font-weight: 700; }
+
+    /* ===== CHAT BUBBLES (ChatGPT scenario) ===== */
+    .chat-scene { width: 100%; max-width: 700px; margin-top: 32px; }
+
+    .chat-bubble {
+      padding: 18px 24px; border-radius: 18px;
+      font-size: 22px; line-height: 1.5; margin-bottom: 14px;
+      max-width: 85%; position: relative;
+    }
+
+    .chat-bubble.user {
+      background: #2a5fdd; color: #fff;
+      margin-left: auto; border-bottom-right-radius: 4px;
+    }
+
+    .chat-bubble.ai {
+      background: #2a2723; color: var(--text-dim);
+      border-bottom-left-radius: 4px; border: 1px solid var(--border);
+    }
+
+    .chat-bubble .chat-label {
+      font-size: 13px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 6px; display: block;
+    }
+
+    .chat-bubble.user .chat-label { color: rgba(255,255,255,0.5); }
+    .chat-bubble.ai .chat-label { color: var(--text-faint); }
+
+    .chat-result {
+      margin-top: 20px; padding: 16px 20px;
+      border-left: 3px solid var(--accent);
+      font-size: 24px; color: var(--text-dim); font-weight: 500;
+    }
+
+    /* ===== TEAM GRID ===== */
+    .team-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 14px; width: 100%; margin-top: 36px;
+    }
+
+    .team-card {
+      padding: 20px 24px; background: var(--surface);
+      border-radius: 12px; border-left: 3px solid var(--text-faint);
+      transition: transform 0.3s;
+    }
+
+    .team-card:hover { transform: translateX(4px); }
+
+    .team-card h4 {
+      font-size: 22px; font-weight: 700; margin-bottom: 4px;
+    }
+
+    .team-card p {
+      font-size: 18px; color: var(--text-dim); margin: 0; max-width: none;
+    }
+
+    .team-card.role-biz { border-left-color: var(--accent); }
+    .team-card.role-biz h4 { color: var(--accent); }
+
+    .team-card.role-prod { border-left-color: #c084fc; }
+    .team-card.role-prod h4 { color: #c084fc; }
+
+    .team-card.role-eng { border-left-color: #34d399; }
+    .team-card.role-eng h4 { color: #34d399; }
+
+    .team-card.role-qa { border-left-color: #38bdf8; }
+    .team-card.role-qa h4 { color: #38bdf8; }
+
+    .team-card.role-ops { border-left-color: #2dd4bf; }
+    .team-card.role-ops h4 { color: #2dd4bf; }
+
+    /* ===== MAPPING TABLE (GSD reveal) ===== */
+    .map-row {
+      display: flex; align-items: center; gap: 16px;
+      padding: 18px 0; border-bottom: 1px solid var(--border);
+    }
+
+    .map-row:last-child { border: none; }
+
+    .map-col-left {
+      flex: 1; font-size: 22px; color: var(--text-dim); text-align: right;
+      padding-right: 16px;
+    }
+
+    .map-arrow {
+      color: var(--accent); font-size: 24px; flex-shrink: 0; font-weight: 700;
+    }
+
+    .map-col-right {
+      flex: 1; font-size: 22px; color: var(--accent); font-weight: 600;
+      padding-left: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .slide { padding: 40px 32px; }
+      .need-grid, .compare-grid { grid-template-columns: 1fr; }
+      .tool-feature { flex-direction: column; gap: 16px; }
+      .h-branch { flex-direction: column; align-items: center; }
+      .team-grid { grid-template-columns: 1fr; }
+      .chat-bubble { max-width: 95%; }
+      .map-col-left, .map-col-right { font-size: 18px; }
+      .stat-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 -->
+  <div class="slide active">
+    <div class="content centered stagger">
+      <div class="label">Superhuman Workshop</div>
+      <h1>From Chatbots<br>to <span class="hl">Conductors.</span></h1>
+      <p style="margin-top: 24px;">Build real things with AI &mdash; not by learning to code,<br>but by learning to direct.</p>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="slide">
+    <div class="content centered stagger">
+      <p class="statement">You've used AI. It's great for quick things &mdash; drafting emails, brainstorming, explaining concepts.</p>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="slide">
+    <div class="content centered stagger">
+      <p class="statement">But try building something <span class="hl">real</span> &mdash; a website, an app, a complex project &mdash; and it falls apart.</p>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="slide">
+    <div class="content stagger">
+      <div class="label">The Limits</div>
+      <h2>Chat AI has four<br><span class="hl">hard limits.</span></h2>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="slide">
+    <div class="content stagger">
+      <div class="limit-row">
+        <div class="l-num">1</div>
+        <div>
+          <h3>It can't see your files</h3>
+          <p>You copy-paste code into a chat window, hoping you grabbed the right parts. It has zero idea what your project looks like.</p>
+        </div>
+      </div>
+      <div class="limit-row">
+        <div class="l-num">2</div>
+        <div>
+          <h3>It can't do anything</h3>
+          <p>It gives you text. You copy that text, open another app, and apply the changes yourself. Every. Single. Time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="slide">
+    <div class="content stagger">
+      <div class="limit-row">
+        <div class="l-num">3</div>
+        <div>
+          <h3>It forgets everything</h3>
+          <p>Every conversation starts from zero. Last week's context? Gone. You repeat yourself endlessly.</p>
+        </div>
+      </div>
+      <div class="limit-row">
+        <div class="l-num">4</div>
+        <div>
+          <h3>It freestyles every answer</h3>
+          <p>No structured process. No methodology. You get whatever it comes up with in the moment.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="slide">
+    <div class="content centered stagger">
+      <p class="statement">Chat AI is a brain in a jar.<br>Smart &mdash; but <span class="hl">no hands, no eyes, no workspace.</span></p>
+    </div>
+  </div>
+
+  <!-- 8: CONTEXT WINDOW -->
+  <div class="slide">
+    <div class="content stagger">
+      <div class="label">The Core Constraint</div>
+      <h2>The context window.</h2>
+      <p>Every AI has a limit on how much it can hold in its head at once. Think of it like a desk that fills up.</p>
+      <div class="ctx-bars">
+        <div class="ctx-bar"><div class="fill" style="width:25%"></div><span class="bar-label">Quick question</span></div>
+        <div class="ctx-bar"><div class="fill" style="width:55%"></div><span class="bar-label">Edit a page</span></div>
+        <div class="ctx-bar overflow"><div class="fill" style="width:150%"></div><span class="bar-label" style="left:auto;right:16px;">Build an entire website &mdash; doesn't fit</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="slide">
+    <div class="content centered stagger">
+      <h2>The solution:</h2>
+      <h2 style="margin-top:8px;"><span class="hl">Break it into pieces</span> that each fit.</h2>
+      <div class="ctx-pieces" style="margin-top: 48px;">
+        <div class="ctx-piece">Homepage</div>
+        <div class="ctx-piece">Gallery</div>
+        <div class="ctx-piece">About</div>
+        <div class="ctx-piece">Deploy</div>
+      </div>
+      <p style="margin-top: 32px;">One conversation = one focused task. Not an entire project.</p>
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="slide">
+    <div class="content centered stagger">
+      <p class="statement">We don't need a smarter chatbot.<br>We need an AI that can actually <span class="hl">work.</span></p>
+    </div>
+  </div>
+
+  <!-- 11: WHAT WE NEED -->
+  <div class="slide">
+    <div class="content stagger">
+      <div class="label">The Upgrade</div>
+      <h2>What we actually need.</h2>
+      <div class="need-grid">
+        <div class="need-item">
+          <h3>See your files</h3>
+          <p>Read the project. Understand the structure. No copy-pasting.</p>
+        </div>
+        <div class="need-item">
+          <h3>Edit directly</h3>
+          <p>Make changes in place. Write code, update content, fix bugs.</p>
+        </div>
+        <div class="need-item">
+          <h3>Run commands</h3>
+          <p>Test, build, deploy. Not just talk about it &mdash; actually do it.</p>
+        </div>
+        <div class="need-item">
+          <h3>Follow processes</h3>
+          <p>Expert workflows, not freestyling. Consistent results.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12: EVOLUTION -->
+  <div class="slide">
+    <div class="content stagger">
+      <div class="label">The Evolution</div>
+      <h2>How we got here.</h2>
+      <div class="evo-stack">
+        <div class="evo-row">
+          <div class="evo-stage">Chat / LLM</div>
+          <div class="evo-desc">Knowledge, writing &mdash; but can only talk</div>
+        </div>
+        <div class="evo-row">
+          <div class="evo-stage">Agent</div>
+          <div class="evo-desc">Multi-step reasoning &mdash; but sandboxed</div>
+        </div>
+        <div class="evo-row">
+          <div class="evo-stage">MCP &amp; Tools</div>
+          <div class="evo-desc">Calls APIs, reads email &mdash; but cloud only</div>
+        </div>
+        <div class="evo-row">
+          <div class="evo-stage">Claude Code</div>
+          <div class="evo-desc">Read, write, run, test in your terminal</div>
+        </div>
+        <div class="evo-row">
+          <div class="evo-stage">Spec-Driven</div>
+          <div class="evo-desc">Structured specs replace freestyling</div>
+        </div>
+        <div class="evo-row current">
+          <div class="evo-stage">GSD &rarr;</div>
+          <div class="evo-desc">You become the conductor.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13: CLAUDE CODE -->
+  <div class="slide">
+    <div class="content stagger">
+      <div class="label">The Tools</div>
+      <h2>Claude Code</h2>
+      <div class="tool-feature">
+        <div class="tool-icon">&#9000;</div>
+        <div>
+          <h3>AI in your terminal</h3>
+          <p>It lives inside your project. Reads your files. Edits your code. Runs your commands.</p>
+          <p>Your entire production crew &mdash; in one tool.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14: GITHUB + VERCEL -->
+  <div class="slide">
+    <div class="content stagger">
+      <div class="label">The Tools</div>
+      <h2>GitHub + Vercel</h2>
+      <div class="tool-feature" style="margin-top:32px;">
+        <div class="tool-icon">&#128187;</div>
+        <div>
+          <h3>GitHub &mdash; your project's home</h3>
+          <p>Every change saved with a label. Full history. Like "Track Changes" for your entire project. You can always go back.</p>
+        </div>
+      </div>
+      <div class="tool-feature" style="margin-top:24px;">
+        <div class="tool-icon">&#9650;</div>
+        <div>
+          <h3>Vercel &mdash; your site goes live</h3>
+          <p>Push to GitHub, Vercel deploys automatically. Real URL, live in 30 seconds. Free.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 15: THE FLOW -->
+  <div class="slide">
+    <div class="content centered stagger">
+      <div class="label">The Flow</div>
+      <h2>How changes go live.</h2>
+      <div class="flow-row">
+        <div class="flow-node">You describe</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">Claude edits</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">Commit</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">Push</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node hl-node">Live!</div>
+      </div>
+      <p>From idea to the real internet. Minutes, not days.</p>
+    </div>
+  </div>
+
+  <!-- 16: STATEMENT -->
+  <div class="slide">
+    <div class="content centered stagger">
+      <p class="statement">This is powerful &mdash; but it's still one person improvising.<br><br>Real products are built by <span class="hl">teams with a process.</span></p>
+    </div>
+  </div>
+
+  <!-- 17: HOW TEAMS WORK -->
+  <div class="slide">
+    <div class="content stagger">
+      <div class="label">The Professional Way</div>
+      <h2>How engineering teams work.</h2>
+      <div style="margin-top: 32px;">
+        <div class="team-step">
+          <div class="ts-role biz">Business</div>
+          <div class="ts-action">Sets the vision. "We need a portfolio that attracts clients."</div>
+        </div>
+        <div class="team-step">
+          <div class="ts-role prod">Product</div>
+          <div class="ts-action">Researches. Writes requirements. Creates scoped tickets.</div>
+        </div>
+        <div class="team-step">
+          <div class="ts-role eng">Engineering</div>
+          <div class="ts-action">Designs architecture. Writes a technical plan.</div>
+        </div>
+        <div class="team-step">
+          <div class="ts-role eng">Engineering</div>
+          <div class="ts-action">Implements code. Writes tests. Reviews work.</div>
+        </div>
+        <div class="team-step">
+          <div class="ts-role qa">QA / Product</div>
+          <div class="ts-action">Verifies against acceptance criteria. Ship or fix.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 18: STATEMENT -->
+  <div class="slide">
+    <div class="content centered stagger">
+      <p class="statement">This process works. It's how every successful product gets built.<br><br>The problem? It requires <span class="hl">an entire team.</span></p>
+    </div>
+  </div>
+
+  <!-- 19: GSD MAPPING -->
+  <div class="slide">
+    <div class="content stagger">
+      <div class="label">The Breakthrough</div>
+      <h2>GSD does <span class="hl">all of this.</span></h2>
+      <table class="map-table">
+        <thead>
+          <tr><th>Team Role</th><th></th><th>GSD + You</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Business sets vision</td><td>&rarr;</td><td>You describe your vision</td></tr>
+          <tr><td>Product researches &amp; writes reqs</td><td>&rarr;</td><td>/gsd:new-project</td></tr>
+          <tr><td>Product creates scoped tickets</td><td>&rarr;</td><td>Roadmap auto-generated</td></tr>
+          <tr><td>Engineering architects &amp; plans</td><td>&rarr;</td><td>/gsd:plan-phase</td></tr>
+          <tr><td>Engineering implements &amp; tests</td><td>&rarr;</td><td>/gsd:execute-phase</td></tr>
+          <tr><td>QA verifies acceptance criteria</td><td>&rarr;</td><td>/gsd:verify-work</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 20: STATEMENT -->
+  <div class="slide">
+    <div class="content centered stagger">
+      <p class="statement">From a team of 5&ndash;10 people<br>to <span class="hl">just you</span> and a framework.<br><br>Same process. Same rigor.</p>
+    </div>
+  </div>
+
+  <!-- 21: GSD HIERARCHY -->
+  <div class="slide">
+    <div class="content centered stagger">
+      <div class="label">The GSD Framework</div>
+      <h2>Get Shit Done.</h2>
+      <div class="hierarchy">
+        <div class="h-node"><div class="h-label">Project</div><div class="h-desc">"My portfolio website"</div></div>
+        <div class="h-connector"></div>
+        <div class="h-node"><div class="h-label">Milestone</div><div class="h-desc">v1: The core site</div></div>
+        <div class="h-connector"></div>
+        <div class="h-node"><div class="h-label">Phases</div><div class="h-desc">Logical chunks of work</div></div>
+        <div class="h-connector"></div>
+        <div class="h-branch">
+          <div class="h-node"><div class="h-label">Phase 1</div><div class="h-desc">Homepage</div></div>
+          <div class="h-node"><div class="h-label">Phase 2</div><div class="h-desc">Gallery</div></div>
+          <div class="h-node"><div class="h-label">Phase 3</div><div class="h-desc">Deploy</div></div>
+        </div>
+      </div>
+      <div class="flow-row" style="margin-top: 40px;">
+        <div class="flow-node">Plan</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">Build</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">Verify</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node hl-node">Done</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 22: COMMANDS -->
+  <div class="slide">
+    <div class="content stagger">
+      <div class="label">The Commands</div>
+      <h2>Four commands. That's it.</h2>
+      <div style="margin-top: 32px;">
+        <div class="cmd-row">
+          <div class="cmd-code">/gsd:new-project</div>
+          <div class="cmd-desc">AI interviews you. Creates a project &amp; roadmap.</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">/gsd:plan-phase</div>
+          <div class="cmd-desc">Researches. Writes a detailed plan for your review.</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">/gsd:execute-phase</div>
+          <div class="cmd-desc">Writes code. Makes commits. Runs checks.</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">/gsd:progress</div>
+          <div class="cmd-desc">Where you are. Picks up where you left off.</div>
+        </div>
+      </div>
+      <div class="sessions">
+        <div class="s-card"><h5>Session 1</h5><p>Homepage</p></div>
+        <div class="s-card"><h5>Session 2</h5><p>Projects page</p></div>
+        <div class="s-card"><h5>Session 3</h5><p>Deployed</p></div>
+      </div>
+      <div class="s-persist">State persists between sessions</div>
+    </div>
+  </div>
+
+  <!-- 23: WALKTHROUGH -->
+  <div class="slide">
+    <div class="content stagger">
+      <div class="label">The Walkthrough</div>
+      <h2>Empty folder &rarr; <span class="hl">live site.</span></h2>
+      <div class="walk-steps">
+        <div class="walk-step">
+          <h4><span class="hl">/gsd:new-project</span></h4>
+          <p>Claude asks: "What do visitors feel? Who's your audience?"</p>
+        </div>
+        <div class="walk-step">
+          <h4>Roadmap auto-generated</h4>
+          <p>Homepage &rarr; Gallery &rarr; About + Contact &rarr; Polish + Deploy</p>
+        </div>
+        <div class="walk-step">
+          <h4>Plan &rarr; Build &rarr; Feedback &rarr; Refine</h4>
+          <p>"The font feels too heavy." Claude adjusts in seconds.</p>
+        </div>
+        <div class="walk-step">
+          <h4>Repeat for each phase</h4>
+          <p>Same rhythm. New session? GSD picks up exactly where you left off.</p>
+        </div>
+        <div class="walk-step">
+          <h4>Deploy &rarr; Live URL</h4>
+          <p>Real website. Built from conversations. Zero code written by you.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 24: UNIVERSAL -->
+  <div class="slide">
+    <div class="content centered stagger">
+      <p class="statement">This isn't a software technique.<br>It's how <span class="hl">any structured project</span> works.</p>
+    </div>
+  </div>
+
+  <!-- 25: COMPARISON TABLE -->
+  <div class="slide">
+    <div class="content stagger">
+      <div class="label">Universal Pattern</div>
+      <h2>One pattern. Any project.</h2>
+      <table class="method-table" style="margin-top: 32px;">
+        <thead>
+          <tr><th>Step</th><th>Personal Website</th><th>Apartment Renovation</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Vision</td><td>A site that showcases my work</td><td>A modern home that feels like mine</td></tr>
+          <tr><td>Break down</td><td>Homepage, About, Blog</td><td>Living room, Kitchen, Bedroom</td></tr>
+          <tr><td>Research</td><td>Design trends, CMS options</td><td>Materials, prices, regulations</td></tr>
+          <tr><td>Plan</td><td>Feature list, phased rollout</td><td>Budget, timeline, dependencies</td></tr>
+          <tr><td>Execute</td><td>"Build hero section"</td><td>"Get 3 quotes," "order tiles"</td></tr>
+          <tr><td>Verify</td><td>AI self-checks, you review</td><td>Check vs budget, adjust</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 26: WHAT ELSE -->
+  <div class="slide">
+    <div class="content stagger">
+      <div class="label">Beyond Websites</div>
+      <h2>What else you can build.</h2>
+      <div style="margin-top: 32px;">
+        <div class="idea-strip">
+          <div class="i-icon">&#127760;</div>
+          <div><h4>Web Applications</h4><p>Booking systems, client portals, event RSVPs</p></div>
+        </div>
+        <div class="idea-strip">
+          <div class="i-icon">&#128736;</div>
+          <div><h4>Internal Tools</h4><p>Dashboards, databases, inventory trackers</p></div>
+        </div>
+        <div class="idea-strip">
+          <div class="i-icon">&#9889;</div>
+          <div><h4>Automations</h4><p>Reports, image processing, email workflows</p></div>
+        </div>
+        <div class="idea-strip">
+          <div class="i-icon">&#128221;</div>
+          <div><h4>Content Systems</h4><p>Blogs, newsletters, documentation</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 27: TAKEAWAYS -->
+  <div class="slide">
+    <div class="content stagger">
+      <div class="label">What You'll Walk Away With</div>
+      <h2>Today's output.</h2>
+      <div style="margin-top: 32px;">
+        <div class="output-item">
+          <div class="o-marker"></div>
+          <div><h4>A live personal website</h4><p>Deployed on Vercel. Your own URL.</p></div>
+        </div>
+        <div class="output-item">
+          <div class="o-marker"></div>
+          <div><h4>The spec-driven methodology</h4><p>For any project &mdash; digital or physical.</p></div>
+        </div>
+        <div class="output-item">
+          <div class="o-marker"></div>
+          <div><h4>A new mental model</h4><p>Orchestrating AI agents, not chatting with them.</p></div>
+        </div>
+        <div class="output-item">
+          <div class="o-marker"></div>
+          <div><h4>Hands-on experience</h4><p>Claude Code, GitHub, Vercel, GSD &mdash; used for real.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 28: CLOSING -->
+  <div class="slide">
+    <div class="content centered stagger">
+      <h1>Ready to become<br>a <span class="hl">conductor?</span></h1>
+      <div class="flow-row" style="margin-top: 56px;">
+        <div class="flow-node">Vision</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">Spec</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">Plan</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">Build</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">Verify</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node hl-node">Ship</div>
+      </div>
+      <p style="margin-top: 48px; color: var(--text-faint); font-size: 20px;">Let's build.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav-hint">
+  <span id="slideCount">1 / 28</span>
+</div>
+
+<script>
+  const deck = document.getElementById('deck');
+  const slides = deck.querySelectorAll('.slide');
+  const progressBar = document.getElementById('progress');
+  const slideCount = document.getElementById('slideCount');
+  let current = 0;
+  const total = slides.length;
+  let animating = false;
+
+  function goTo(n) {
+    if (n < 0 || n >= total || n === current || animating) return;
+    animating = true;
+    const prev = slides[current];
+    const next = slides[n];
+    const forward = n > current;
+
+    next.classList.remove('active', 'transitioning', 'to-left', 'to-right');
+    next.classList.add(forward ? 'to-right' : 'to-left');
+    void next.offsetWidth;
+
+    prev.classList.add('transitioning');
+    next.classList.add('transitioning');
+
+    prev.classList.remove('active');
+    prev.classList.add(forward ? 'to-left' : 'to-right');
+    next.classList.remove('to-left', 'to-right');
+    next.classList.add('active');
+
+    setTimeout(() => {
+      prev.classList.remove('transitioning', 'to-left', 'to-right');
+      next.classList.remove('transitioning');
+      animating = false;
+    }, 500);
+
+    current = n;
+    updateUI();
+  }
+
+  function updateUI() {
+    progressBar.style.width = ((current + 1) / total * 100) + '%';
+    slideCount.textContent = (current + 1) + ' / ' + total;
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); goTo(current + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); goTo(current - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    else if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+  });
+
+  deck.addEventListener('click', (e) => {
+    if (e.target.closest('a, button')) return;
+    const x = e.clientX / window.innerWidth;
+    if (x < 0.33) goTo(current - 1);
+    else goTo(current + 1);
+  });
+
+  let tx = 0;
+  deck.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; });
+  deck.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) { dx < 0 ? goTo(current + 1) : goTo(current - 1); }
+  });
+
+  updateUI();
+</script>
+
+</body>
+</html>
