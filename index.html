@@ -130,6 +130,10 @@
       overflow-wrap: break-word;
     }
 
+    @media (max-width: 600px) {
+      h1 br, h2 br { display: none; }
+    }
+
     h3 {
       font-family: var(--font-display);
       font-size: 20px;
@@ -963,6 +967,34 @@
       </div>
     </div>
 
+    <!-- ===== THE MOMENT ===== -->
+    <section class="section hidden" style="text-align: center;">
+      <span class="section-number">00 — The moment</span>
+      <h2>Something is happening.</h2>
+      <p style="max-width: 520px; margin: 12px auto 40px;">The tools changed. Most people haven't noticed yet.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 600px; margin: 0 auto;">
+        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px 16px; text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: clamp(32px, 5vw, 40px); font-weight: 700; color: var(--accent-gold); line-height: 1;">41%</div>
+          <div style="font-size: 13px; color: var(--text-muted); margin-top: 8px;">of all code is now AI-generated</div>
+        </div>
+        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px 16px; text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: clamp(32px, 5vw, 40px); font-weight: 700; color: var(--accent-gold); line-height: 1;">92%</div>
+          <div style="font-size: 13px; color: var(--text-muted); margin-top: 8px;">of US devs use AI coding tools daily</div>
+        </div>
+        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px 16px; text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: clamp(32px, 5vw, 40px); font-weight: 700; color: var(--accent-green); line-height: 1;">$2K</div>
+          <div style="font-size: 13px; color: var(--text-muted); margin-top: 8px;">MVP cost (was $80K / 4 months)</div>
+        </div>
+        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px 16px; text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: clamp(32px, 5vw, 40px); font-weight: 700; color: var(--accent-green); line-height: 1;">8 days</div>
+          <div style="font-size: 13px; color: var(--text-muted); margin-top: 8px;">to ship what took 4 months</div>
+        </div>
+      </div>
+
+      <p style="margin-top: 24px; font-size: 13px; color: var(--text-muted); font-family: var(--font-mono);">Sources: CNBC, SaaStr, Appfigures, TechCrunch (2025)</p>
+    </section>
+
     <!-- ===== THE WHY ===== -->
     <section class="section hidden">
       <span class="section-number">01 — The problem</span>
@@ -1269,8 +1301,8 @@
         <div class="prereq-item">
           <div class="prereq-num">05</div>
           <div>
-            <div class="prereq-name">VS Code + Terminal</div>
-            <p class="prereq-note">For running Claude Code and viewing the project.</p>
+            <div class="prereq-name">Your Laptop</div>
+            <p class="prereq-note">Bring it charged and ready. You'll be building hands-on.</p>
           </div>
         </div>
       </div>
